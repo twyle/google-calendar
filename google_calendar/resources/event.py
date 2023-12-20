@@ -5,11 +5,13 @@ from ..schemas import (
     EventSchema,
     ListCalendarEvents,
     ListCalendarEventsResponse,
+    PatchEventSchema,
+    UpdateEventSchema,
 )
-from .calendar_resource import CalendarResource
+from .resource import Resource
 
 
-class EventResource(CalendarResource):
+class EventResource(Resource):
     def create_event(self) -> Event:
         event = {
             'summary': 'Google I/O 2015',
@@ -86,4 +88,29 @@ class EventResource(CalendarResource):
     def list_calendar_events(
         self, list_calendar_events: ListCalendarEvents
     ) -> ListCalendarEventsResponse:
+        raise NotImplementedError()
+
+    def move_event(
+        self,
+        event_id: str,
+        destination: str,
+        calendar_id: str = 'primary',
+        send_notifications: bool = False,
+        send_updates: str = 'all',
+    ) -> Event:
+        raise NotImplementedError()
+
+    def update_event(self, update: UpdateEventSchema) -> Event:
+        raise NotImplementedError()
+
+    def patch_event(self, patch: PatchEventSchema) -> Event:
+        raise NotImplementedError()
+
+    def quick_add(
+        self,
+        text: str,
+        calendar_id: str = 'primary',
+        send_notifications: bool = False,
+        send_updates: str = 'all',
+    ) -> Event:
         raise NotImplementedError()

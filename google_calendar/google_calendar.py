@@ -3,14 +3,19 @@ from typing import Any, Optional
 from oryks_google_oauth import GoogleCalendarScopes, GoogleOAuth
 from pydantic import BaseModel, Field
 
-from .models import Event
-from .resources import EventResource
+from .models import Calendar, Event
+from .resources import CalendarResource, EventResource
 from .schemas import (
+    CreateCalendar,
     EventInstances,
     EventInstancesResponse,
     EventSchema,
     ListCalendarEvents,
     ListCalendarEventsResponse,
+    PatchCalendar,
+    PatchEventSchema,
+    UpdateCalendar,
+    UpdateEventSchema,
 )
 
 
@@ -103,3 +108,80 @@ class GoogleCalendar(BaseModel):
             calendar_client=self.calendar_client
         )
         return event_resource.get_recurring_event_instances(list_calendar_events)
+
+    def move_event(
+        self,
+        event_id: str,
+        destination: str,
+        calendar_id: str = 'primary',
+        send_notifications: bool = False,
+        send_updates: str = 'all',
+    ) -> Event:
+        event_resource: EventResource = EventResource(
+            calendar_client=self.calendar_client
+        )
+        return event_resource.move_event(
+            event_id, destination, calendar_id, send_notifications, send_updates
+        )
+
+    def update_event(self, update: UpdateEventSchema) -> Event:
+        event_resource: EventResource = EventResource(
+            calendar_client=self.calendar_client
+        )
+        return event_resource.update_event(update)
+
+    def patch_event(self, patch: PatchEventSchema) -> Event:
+        event_resource: EventResource = EventResource(
+            calendar_client=self.calendar_client
+        )
+        return event_resource.patch_event(patch)
+
+    def quick_add(
+        self,
+        text: str,
+        calendar_id: str = 'primary',
+        send_notifications: bool = False,
+        send_updates: str = 'all',
+    ) -> Event:
+        event_resource: EventResource = EventResource(
+            calendar_client=self.calendar_client
+        )
+        return event_resource.quick_add(
+            text, calendar_id, send_notifications, send_updates
+        )
+
+    def clear_calendar(self, calendar_id: str = 'primary') -> None:
+        calendar_resource: CalendarResource = CalendarResource(
+            calendar_client=self.calendar_client
+        )
+        return calendar_resource.clear_calendar(calendar_id)
+
+    def delete_calendar(self, secondary_calendar_id: str) -> None:
+        calendar_resource: CalendarResource = CalendarResource(
+            calendar_client=self.calendar_client
+        )
+        return calendar_resource.delete_calendar(secondary_calendar_id)
+
+    def get_calendar(self, calendar_id: str = 'primary') -> Calendar:
+        calendar_resource: CalendarResource = CalendarResource(
+            calendar_client=self.calendar_client
+        )
+        return calendar_resource.get_calendar(calendar_id)
+
+    def create_calendar(self, calendar: CreateCalendar) -> Calendar:
+        calendar_resource: CalendarResource = CalendarResource(
+            calendar_client=self.calendar_client
+        )
+        return calendar_resource.create_calendar(calendar)
+
+    def patch_calendar(self, calendar: PatchCalendar) -> Calendar:
+        calendar_resource: CalendarResource = CalendarResource(
+            calendar_client=self.calendar_client
+        )
+        return calendar_resource.patch_calendar(calendar)
+
+    def update_calendar(self, calendar: UpdateCalendar) -> Calendar:
+        calendar_resource: CalendarResource = CalendarResource(
+            calendar_client=self.calendar_client
+        )
+        return calendar_resource.update_calendar(calendar)

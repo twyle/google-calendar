@@ -3,5 +3,5 @@ from typing import Any
 from pydantic import BaseModel
 
 
-class CalendarResource(BaseModel):
+class Resource(BaseModel):
     calendar_client: Any
