@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import Field
 
 from .attachment import Attachment
 from .attendee import Attendee
@@ -17,44 +17,43 @@ from .working_location_properties import WorkingLocationProperties
 
 
 class Event(Resource):
-    status: str = ''
-    html_link: str
-    created: datetime
-    updated: datetime
-    summary: str
-    description: str
-    location: str
-    color_id: str
     creator: Creator
-    organizer: Organizer
-    start: EventTime
-    end: EventTime
-    end_time_unspecified: bool
-    recurrence: list[str] = Field(default_factory=list)
-    recurring_event_id: str
-    original_start_time: EventTime
-    transparency: str
-    visibility: str
-    icaluid: str
-    sequence: int
-    attendees: list[Attendee] = Field(default_factory=list)
-    attendees_omitted: bool
-    hangout_link: str
-    color_id: str
-    conference_data: ConferenceData
+    # end: EventTime
     etag: str
     event_type: str
+    html_link: str
+    icaluid: str
     id: str
     kind: str
-    location: str
-    locked: bool
-    out_of_office_properties: OutOfficeProperties
-    focus_time_properties: FocusTimeProperties
-    private_copy: bool
+    organizer: Organizer
+    sequence: int
+    start: EventTime
+    summary: str
+
     attachments: list[Attachment] = Field(default_factory=list)
-    working_location_properties: WorkingLocationProperties
-    source: Source
-    reminders: Reminders
-    guests_can_invite_others: bool
-    guests_can_modify: bool
-    guests_can_see_other_guests: bool
+    attendees_omitted: bool = False
+    attendees: list[Attendee] = Field(default_factory=list)
+    color_id: str = ''
+    conference_data: ConferenceData = None
+    created: datetime = None
+    description: str = ''
+    end_time_unspecified: bool = False
+    focus_time_properties: FocusTimeProperties = None
+    guests_can_invite_others: bool = True
+    guests_can_modify: bool = False
+    guests_can_see_other_guests: bool = True
+    hangout_link: str = ''
+    location: str = ''
+    locked: bool = False
+    original_start_time: EventTime = None
+    out_of_office_properties: OutOfficeProperties = None
+    private_copy: bool = False
+    recurrence: list[str] = Field(default_factory=list)
+    recurring_event_id: str = ''
+    reminders: Reminders = None
+    source: Source = None
+    status: str = ''
+    transparency: str = ''
+    updated: datetime = None
+    visibility: str = ''
+    working_location_properties: WorkingLocationProperties = None

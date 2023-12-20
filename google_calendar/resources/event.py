@@ -1,6 +1,6 @@
 from typing import Any
 
-from ..models import Event
+from ..models import Creator, Event, EventTime, Organizer, Person
 from ..schemas import (
     CalendarRequest,
     DefaultReminder,
@@ -36,8 +36,47 @@ class EventResource(Resource):
             reminders.append(self.parse_default_reminder(reminder))
         return reminders
 
-    def parse_items(self, items: dict[str, Any]) -> list[Resource]:
-        return items
+    def parse_person(self, person: dict[str, Any]) -> Person:
+        parsed_person: dict = dict()
+        parsed_person['email'] = person['email']
+        parsed_person['display_name'] = person.get('displayName', '')
+        parsed_person['self_'] = person.get('self', False)
+        return Person(**parsed_person)
+
+    def parse_event_time(self, event_time: dict) -> EventTime:
+        parsed_time: dict = dict()
+        parsed_time['time_zone'] = event_time.get('timeZone', '')
+        parsed_time['date_'] = event_time.get('date', None)
+        parsed_time[''] = event_time.get('dateTime', None)
+        return EventTime(**parsed_time)
+
+    def parse_item(self, item: dict[str, Any]) -> Event:
+        parsed_item: dict[str, Any] = dict()
+        parsed_item['created'] = item['created']
+        parsed_item['updated'] = item['updated']
+        parsed_item['id'] = item['id']
+        parsed_item['kind'] = item['kind']
+        parsed_item['etag'] = item['etag']
+        parsed_item['icaluid'] = item['iCalUID']
+        parsed_item['sequence'] = item['sequence']
+        parsed_item['html_link'] = item['htmlLink']
+        parsed_item['event_type'] = item['eventType']
+        parsed_item['summary'] = item['summary']
+        parsed_item['creator'] = Creator(
+            **self.parse_person(item['creator']).model_dump()
+        )
+        parsed_item['organizer'] = Organizer(
+            **self.parse_person(item['organizer']).model_dump()
+        )
+        parsed_item['start'] = self.parse_event_time(item['start'])
+        parsed_item['end'] = self.parse_event_time(item['end'])
+        return Event(**parsed_item)
+
+    def parse_items(self, items: dict[str, Any]) -> list[Event]:
+        parsed_items: list[Event] = list()
+        for item in items[:2]:
+            parsed_items.append(self.parse_item(item))
+        return parsed_items
 
     def parse_list_calendar_events(
         self, calendar_response: dict[str, Any]

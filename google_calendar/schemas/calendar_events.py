@@ -18,7 +18,6 @@ class ListCalendarEventsResponse(BaseModel):
     time_zone: str
     access_role: str
     default_reminders: list[DefaultReminder] = Field(default_factory=list)
-    # items: list[Resource] = Field(default_factory=list)
-    items: list[dict] = Field(default_factory=list)
+    items: list[Resource] = Field(default_factory=list)
     next_page_token: str = None
     next_sync_token: str = None

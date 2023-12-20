@@ -8,6 +8,7 @@ __pycache__/
 
 app.py
 client_secret.json
+events.json
 
 # Distribution / packaging
 .Python
