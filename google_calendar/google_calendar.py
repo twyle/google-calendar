@@ -107,7 +107,7 @@ class GoogleCalendar(BaseModel):
         event_resource: EventResource = EventResource(
             calendar_client=self.calendar_client
         )
-        return event_resource.get_recurring_event_instances(list_calendar_events)
+        return event_resource.list_calendar_events(list_calendar_events)
 
     def move_event(
         self,
