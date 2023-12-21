@@ -124,13 +124,12 @@ class EventResource(Resource):
         #         ],
         #     },
         # }
-        event = (
-            self.calendar_client.events()
-            .insert(calendarId='primary', body=self.create_request_dict(event_schema))
-            .execute()
-        )
-        return self.parse_item(event)
-        return self.create_request_dict(event_schema)
+        # event = (
+        #     self.calendar_client.events()
+        #     .insert(calendarId='primary', body=self.create_request_dict(event_schema))
+        #     .execute()
+        # )
+        raise NotImplementedError()
 
     def get_event(
         self,
