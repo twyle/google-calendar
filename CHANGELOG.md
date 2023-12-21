@@ -1,3 +1,9 @@
+## v0.1.2 (2023-12-21)
+
+### Fix
+
+- handles missing keys by skipping them.
+
 ## v0.1.1 (2023-12-21)
 
 ### Fix
