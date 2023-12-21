@@ -2,6 +2,7 @@ from typing import Any
 
 from ..models import Creator, Event, EventTime, Organizer, Person
 from ..schemas import (
+    AttendeeSchema,
     CalendarRequest,
     CreateEvent,
     DefaultReminder,
@@ -101,38 +102,32 @@ class EventResource(Resource):
         parsed_response['items'] = self.parse_items(calendar_response['items'])
         return ListCalendarEventsResponse(**parsed_response)
 
+    def parse_attendees(self, attendees: list[AttendeeSchema]) -> dict:
+        attendees_dict: list[dict] = list()
+        for attendee in attendees:
+            att_dict: dict = dict()
+            for key, value in attendee.model_dump().items():
+                if value:
+                    att_dict[key] = value
+            if att_dict:
+                attendees_dict.append(att_dict)
+        return attendees_dict
+
+    def create_event_dict(self, event_schema: CreateEvent) -> dict:
+        req_dict: dict = dict()
+        for key, value in event_schema.model_dump().items():
+            if value:
+                req_dict[key] = value
+        req_dict['attendees'] = self.parse_attendees(event_schema.attendees)
+        return req_dict
+
     def create_event(self, event_schema: CreateEvent) -> Event:
-        event = {
-            'summary': 'Google I/O 2015',
-            'location': '800 Howard St., San Francisco, CA 94103',
-            'description': "A chance to hear more about Google's developer products.",
-            'start': {
-                'dateTime': '2023-12-21T12:11:36.355536Z',
-                'timeZone': 'Africa/Nairobi',
-            },
-            'end': {
-                'dateTime': '2023-12-21T14:11:36.355561Z',
-                'timeZone': 'Africa/Nairobi',
-            },
-            'recurrence': ['RRULE:FREQ=DAILY;COUNT=2'],
-            'attendees': [
-                {'email': 'lpage@example.com'},
-                {'email': 'sbrin@example.com'},
-            ],
-            'reminders': {
-                'useDefault': False,
-                'overrides': [
-                    {'method': 'email', 'minutes': 24 * 60},
-                    {'method': 'popup', 'minutes': 10},
-                ],
-            },
-        }
         event = (
             self.calendar_client.events()
-            .insert(calendarId='primary', body=self.create_request_dict(event_schema))
+            .insert(calendarId='primary', body=self.create_event_dict(event_schema))
             .execute()
         )
-        return self.parse_item(event)
+        return event
 
     def get_event(
         self,

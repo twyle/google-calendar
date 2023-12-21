@@ -20,6 +20,21 @@ from .reminders import Reminders
 
 class ListCalendarEvents(CalendarRequest):
     calendarId: str = 'primary'
+    eventTypes: list[str] = ['default', 'focusTime', 'outOfOffice']
+    iCalUID: Optional[str] = None
+    maxAttendees: Optional[int] = None
+    maxResults: Optional[int] = None
+    orderBy: Optional[str] = None
+    pageToken: Optional[str] = None
+    q: Optional[str] = None
+    showDeleted: Optional[bool] = None
+    showHiddenInvitations: Optional[bool] = None
+    singleEvents: Optional[bool] = None
+    syncToken: Optional[str] = None
+    timeMax: Optional[str] = None
+    timeMin: Optional[str] = None
+    timeZone: Optional[str] = None
+    updatedMin: Optional[str] = None
 
 
 class ListCalendarEventsResponse(BaseModel):
