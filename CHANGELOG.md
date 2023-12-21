@@ -1,3 +1,9 @@
+## v0.2.0 (2023-12-21)
+
+### Feat
+
+- adds the create event functionality.
+
 ## v0.1.2 (2023-12-21)
 
 ### Fix
