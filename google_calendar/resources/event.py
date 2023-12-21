@@ -3,6 +3,7 @@ from typing import Any
 from ..models import Creator, Event, EventTime, Organizer, Person
 from ..schemas import (
     CalendarRequest,
+    CreateEvent,
     DefaultReminder,
     EventInstances,
     EventInstancesResponse,
@@ -11,7 +12,6 @@ from ..schemas import (
     ListCalendarEventsResponse,
     PatchEventSchema,
     UpdateEventSchema,
-    CreateEvent
 )
 from .resource import Resource
 
@@ -102,7 +102,37 @@ class EventResource(Resource):
         return ListCalendarEventsResponse(**parsed_response)
 
     def create_event(self, event_schema: CreateEvent) -> Event:
-        raise NotImplementedError()
+        event = {
+            'summary': 'Google I/O 2015',
+            'location': '800 Howard St., San Francisco, CA 94103',
+            'description': "A chance to hear more about Google's developer products.",
+            'start': {
+                'dateTime': '2023-12-21T12:11:36.355536Z',
+                'timeZone': 'Africa/Nairobi',
+            },
+            'end': {
+                'dateTime': '2023-12-21T14:11:36.355561Z',
+                'timeZone': 'Africa/Nairobi',
+            },
+            'recurrence': ['RRULE:FREQ=DAILY;COUNT=2'],
+            'attendees': [
+                {'email': 'lpage@example.com'},
+                {'email': 'sbrin@example.com'},
+            ],
+            'reminders': {
+                'useDefault': False,
+                'overrides': [
+                    {'method': 'email', 'minutes': 24 * 60},
+                    {'method': 'popup', 'minutes': 10},
+                ],
+            },
+        }
+        event = (
+            self.calendar_client.events()
+            .insert(calendarId='primary', body=self.create_request_dict(event_schema))
+            .execute()
+        )
+        return self.parse_item(event)
 
     def get_event(
         self,

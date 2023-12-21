@@ -11,11 +11,11 @@ from ..models import (
     Source,
     WorkingLocationProperties,
 )
+from .attendee import Attendee
 from .calendar_request import CalendarRequest
 from .default_reminder import DefaultReminder
-from .attendee import Attendee
-from .reminders import Reminders
 from .event_time import EventTime
+from .reminders import Reminders
 
 
 class ListCalendarEvents(CalendarRequest):
@@ -39,6 +39,7 @@ class ListCalendarEventsResponse(BaseModel):
 class CreateEvent(BaseModel):
     start: EventTime
     end: EventTime
+    summary: str
     attachments: list[Attachment] = Field(default_factory=list)
     attendees: list[Attendee] = Field(default_factory=list)
     colorId: Optional[str] = ''
@@ -54,7 +55,6 @@ class CreateEvent(BaseModel):
     reminders: Optional[Reminders] = None
     sequence: Optional[int] = None
     source: Optional[Source] = None
-    summary: Optional[str] = ''
     transparency: Optional[str] = ''
     visibility: Optional[str] = ''
     working_location_properties: Optional[WorkingLocationProperties] = None

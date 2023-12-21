@@ -7,6 +7,7 @@ from .models import Calendar, Event
 from .resources import CalendarResource, EventResource
 from .schemas import (
     CreateCalendar,
+    CreateEvent,
     EventInstances,
     EventInstancesResponse,
     EventSchema,
@@ -16,7 +17,6 @@ from .schemas import (
     PatchEventSchema,
     UpdateCalendar,
     UpdateEventSchema,
-    CreateEvent
 )
 
 
