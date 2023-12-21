@@ -76,7 +76,10 @@ class EventResource(Resource):
     def parse_items(self, items: dict[str, Any]) -> list[Event]:
         parsed_items: list[Event] = list()
         for item in items:
-            parsed_items.append(self.parse_item(item))
+            try:
+                parsed_items.append(self.parse_item(item))
+            except KeyError:
+                pass
         return parsed_items
 
     def parse_list_calendar_events(
