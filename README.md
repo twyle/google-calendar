@@ -1,5 +1,7 @@
 # google-calendar
+
 ## Overview
+
 A python library for working with the google calendar. Allows the developer to programatically perform the following tasks:
 
 - Schedule an event
@@ -9,13 +11,17 @@ A python library for working with the google calendar. Allows the developer to p
 - Create calendars
 
 ## Getting started
+
 Tou use this library, you will need a Google (GMail) Account and Google Credentials. Follow the instructions in this short [article](https://medium.com/@lyle-okoth/how-to-get-a-google-api-key-d3c38649eaae) to get an API key.
 
 #### Installing the library
+
 ```sh
 pip install oryks-google-calendar
 ```
+
 #### Schedulin an event
+
 ```python
 from google_calendar import GoogleCalendar
 
