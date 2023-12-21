@@ -1,3 +1,9 @@
+## v0.3.0 (2023-12-21)
+
+### Feat
+
+- provides an example in the readme docs.
+
 ## v0.2.0 (2023-12-21)
 
 ### Feat
