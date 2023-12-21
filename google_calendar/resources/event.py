@@ -11,6 +11,7 @@ from ..schemas import (
     ListCalendarEventsResponse,
     PatchEventSchema,
     UpdateEventSchema,
+    CreateEvent
 )
 from .resource import Resource
 
@@ -97,39 +98,39 @@ class EventResource(Resource):
         parsed_response['items'] = self.parse_items(calendar_response['items'])
         return ListCalendarEventsResponse(**parsed_response)
 
-    def create_event(self) -> Event:
-        event = {
-            'summary': 'Google I/O 2015',
-            'location': '800 Howard St., San Francisco, CA 94103',
-            'description': "A chance to hear more about Google's developer products.",
-            'start': {
-                'dateTime': '2015-05-28T09:00:00-07:00',
-                'timeZone': 'America/Los_Angeles',
-            },
-            'end': {
-                'dateTime': '2015-05-28T17:00:00-07:00',
-                'timeZone': 'America/Los_Angeles',
-            },
-            'recurrence': ['RRULE:FREQ=DAILY;COUNT=2'],
-            'attendees': [
-                {'email': 'lpage@example.com'},
-                {'email': 'sbrin@example.com'},
-            ],
-            'reminders': {
-                'useDefault': False,
-                'overrides': [
-                    {'method': 'email', 'minutes': 24 * 60},
-                    {'method': 'popup', 'minutes': 10},
-                ],
-            },
-        }
-
+    def create_event(self, event_schema: CreateEvent) -> Event:
+        # event = {
+        #     "summary": "Google I/O 2015",
+        #     "location": "800 Howard St., San Francisco, CA 94103",
+        #     "description": "A chance to hear more about Google's developer products.",
+        #     "start": {
+        #         "dateTime": "2015-05-28T09:00:00-07:00",
+        #         "timeZone": "America/Los_Angeles",
+        #     },
+        #     "end": {
+        #         "dateTime": "2015-05-28T17:00:00-07:00",
+        #         "timeZone": "America/Los_Angeles",
+        #     },
+        #     "recurrence": ["RRULE:FREQ=DAILY;COUNT=2"],
+        #     "attendees": [
+        #         {"email": "lpage@example.com"},
+        #         {"email": "sbrin@example.com"},
+        #     ],
+        #     "reminders": {
+        #         "useDefault": False,
+        #         "overrides": [
+        #             {"method": "email", "minutes": 24 * 60},
+        #             {"method": "popup", "minutes": 10},
+        #         ],
+        #     },
+        # }
         event = (
             self.calendar_client.events()
-            .insert(calendarId='primary', body=event)
+            .insert(calendarId='primary', body=self.create_request_dict(event_schema))
             .execute()
         )
-        return event
+        return self.parse_item(event)
+        return self.create_request_dict(event_schema)
 
     def get_event(
         self,
@@ -143,7 +144,7 @@ class EventResource(Resource):
             .get(calendarId=calendar_id, eventId=event_id)
             .execute()
         )
-        return event
+        return self.parse_item(event)
 
     def delete_event(
         self,
@@ -200,4 +201,9 @@ class EventResource(Resource):
         send_notifications: bool = False,
         send_updates: str = 'all',
     ) -> Event:
-        raise NotImplementedError()
+        created_event = (
+            self.calendar_client.events()
+            .quickAdd(calendarId='primary', text=text)
+            .execute()
+        )
+        return self.parse_item(created_event)

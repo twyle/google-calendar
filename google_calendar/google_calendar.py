@@ -16,6 +16,7 @@ from .schemas import (
     PatchEventSchema,
     UpdateCalendar,
     UpdateEventSchema,
+    CreateEvent
 )
 
 
@@ -47,11 +48,11 @@ class GoogleCalendar(BaseModel):
         )
         self.calendar_client = oauth.authenticate_google_server()
 
-    def create_event(self) -> Event:
+    def create_event(self, event_schema: CreateEvent) -> Event:
         event_resource: EventResource = EventResource(
             calendar_client=self.calendar_client
         )
-        return event_resource.create_event()
+        return event_resource.create_event(event_schema)
 
     def delete_event(
         self,

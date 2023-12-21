@@ -18,7 +18,7 @@ from .working_location_properties import WorkingLocationProperties
 
 class Event(Resource):
     creator: Creator
-    # end: EventTime
+    end: EventTime
     etag: str
     event_type: str
     html_link: str
