@@ -75,7 +75,7 @@ class EventResource(Resource):
 
     def parse_items(self, items: dict[str, Any]) -> list[Event]:
         parsed_items: list[Event] = list()
-        for item in items[:2]:
+        for item in items:
             parsed_items.append(self.parse_item(item))
         return parsed_items
 
