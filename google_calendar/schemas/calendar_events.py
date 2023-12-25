@@ -10,6 +10,7 @@ from ..models import (
     Resource,
     Source,
     WorkingLocationProperties,
+    Event
 )
 from .attendee import Attendee
 from .calendar_request import CalendarRequest
@@ -46,7 +47,7 @@ class ListCalendarEventsResponse(BaseModel):
     time_zone: str
     access_role: str
     default_reminders: list[DefaultReminder] = Field(default_factory=list)
-    items: list[Resource] = Field(default_factory=list)
+    items: list[Event] = Field(default_factory=list)
     next_page_token: str = None
     next_sync_token: str = None
 

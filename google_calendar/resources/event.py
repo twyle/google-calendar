@@ -48,8 +48,8 @@ class EventResource(Resource):
     def parse_event_time(self, event_time: dict) -> EventTime:
         parsed_time: dict = dict()
         parsed_time['time_zone'] = event_time.get('timeZone', '')
-        parsed_time['date_'] = event_time.get('date', None)
-        parsed_time[''] = event_time.get('dateTime', None)
+        parsed_time['date'] = event_time.get('date', None)
+        parsed_time['date_time'] = event_time.get('dateTime', None)
         return EventTime(**parsed_time)
 
     def parse_item(self, item: dict[str, Any]) -> Event:
@@ -64,6 +64,8 @@ class EventResource(Resource):
         parsed_item['html_link'] = item['htmlLink']
         parsed_item['event_type'] = item['eventType']
         parsed_item['summary'] = item['summary']
+        parsed_item['description'] = item['description']
+        parsed_item['location'] = item['location']
         parsed_item['creator'] = Creator(
             **self.parse_person(item['creator']).model_dump()
         )

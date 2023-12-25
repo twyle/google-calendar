@@ -24,7 +24,8 @@ key_words = [
 install_requires = [
     'oryks-google-oauth',
     'pydantic',
-    'pydantic-settings'
+    'pydantic-settings',
+    'pytz'
 ]
 
 setup(

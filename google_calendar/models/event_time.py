@@ -6,5 +6,5 @@ from pydantic import BaseModel
 
 class EventTime(BaseModel):
     time_zone: str = ''
-    date_: Optional[date] = None
+    date: Optional[date] = None
     date_time: Optional[datetime] = None
